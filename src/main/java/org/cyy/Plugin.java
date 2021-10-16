@@ -128,7 +128,7 @@ public final class Plugin extends JavaPlugin {
             for (int i = 0; i < messages.size(); i++) {
                 //System.out.println(messages.get(i).contentToString());
                 MessageReceipt<Group> groupMessageReceipt = e.getSubject().sendMessage(messages.get(i));
-                groupMessageReceipt.recallIn(50*1000);
+                groupMessageReceipt.recallIn(50*1000*60);
             }
         }else {
             e.getSubject().sendMessage("本群未授权");
@@ -147,7 +147,7 @@ public final class Plugin extends JavaPlugin {
             //如果重复码为空则表明c微信验证code出错
             e.getSubject().sendMessage("code出错，联系我更换！");
         }else {
-            map.put("ReSubmitFlag", loginService.getReSubmitFlag());
+            map.put("ReSubmitFlag",reSubmitFlag);
             //3.获取验证码图片向用户发送验证码图片
             byte[] picByte = loginService.getPicByte();
             ExternalResource externalResource = ExternalResource.create(picByte);
@@ -173,6 +173,20 @@ public final class Plugin extends JavaPlugin {
             e.getSubject().sendMessage("登录出错，try again");
         }else{
             e.getSubject().sendMessage("登录成功！");
+
+            //向所有群群发，cookie已经更新
+            File FileGroup = new File("group");
+            File[] files = FileGroup.listFiles();
+
+            for (int i = 0; i < files.length; i++) {
+                String name = files[i].getName();
+                String[] id = name.split("\\.");
+                Group group = Plugin.MY_BOT.getGroup(Long.parseLong(id[0]));
+                if(group != null){
+                    MessageReceipt<Group> groupMessageReceipt = group.sendMessage("cookie已经更新，可以正常催签到啦！");
+                    groupMessageReceipt.recallIn(50*1000*60);
+                }
+            }
         }
     }
 

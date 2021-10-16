@@ -26,7 +26,7 @@ public class LoginService {
      * @param qun qq群号
      * @return
      */
-    public Map<String,String> getUsernameAndPasswordService(String qun){
+    public Map<String,String>  getUsernameAndPasswordService(String qun){
 
         // 1.通过群号查找是哪个学院要登录
         String collegeNo = groupDao.queryCollegeNo(qun);
@@ -128,6 +128,7 @@ public class LoginService {
             out.write(param);       //向输出流写入参数
             out.flush();
 
+            responseCode = connection.getResponseCode();
             String headerField = connection.getHeaderField("Set-Cookie");
             //System.out.println("setCookie="+headerField);
             String regex = "(.*); expires";
@@ -138,7 +139,7 @@ public class LoginService {
             }
             //System.out.println(res);
             String collegeNo = map.get("collegeNo");
-            String cookie = "ASP.NET_SessionId=2qupfjzgo1uzjvtriacqamod;" + res;
+            String cookie = "ASP.NET_SessionId=vwmfm3bjjb3xmydnz45c4tpt;" + res;
             userDao.updateCookie(collegeNo, cookie);
 
         } catch (Exception e) {

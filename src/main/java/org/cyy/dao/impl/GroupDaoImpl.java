@@ -44,7 +44,7 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public String queryCollegeNo(String qun) {
-        String fileName = "group/"+qun+".properties";
+        String fileName = qun+".properties";
         InputStream is = null;
         String collegeNo = null;
         try {
